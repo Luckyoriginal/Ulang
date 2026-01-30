@@ -2,6 +2,7 @@
 
 typedef enum NodeType {
 	CONSTANT,
+	BINARY,
 }NodeType;
 
 typedef enum ConstantType {
@@ -18,12 +19,26 @@ typedef struct Constant {
 	};
 }Constant;
 
-typedef struct Node{
+typedef struct Node Node;
+
+typedef enum BinaryType{
+	ADDITION,
+}BinaryType;
+
+typedef struct Binary{
+	BinaryType type;
+	Node *a;
+	Node *b;
+}Binary;
+
+struct Node{
 	NodeType type;
 	union {
 		Constant constant;
+		Binary binary;
 	};
-}Node;
+};
+
 
 void create_node_constant(Node* node, float value){
 	node->type = CONSTANT;
@@ -31,16 +46,38 @@ void create_node_constant(Node* node, float value){
 	node->constant.Float = value;
 }
 
-void print_ast(Node root){
+void create_binary_node(Node *node, BinaryType type, Node *a, Node*b){
+	node->type = BINARY;
+	node->binary.type = type;
+	node->binary.a = a;
+	node->binary.b = b;
+}
+
+#define SPACING 3
+void print_ast(Node root, int level){
+	for (int i=0;i<level;i++){
+		printf(" ");
+	}
 	if (root.type==CONSTANT){
 		printf("CONSTANT: %f\n",root.constant.Float);
+	}
+	if (root.type==BINARY){
+		printf("Binary operation");
+		if (root.binary.type == ADDITION){
+			printf(" addition:\n");
+			print_ast(*root.binary.a, level+SPACING);
+			print_ast(*root.binary.b, level+SPACING);
+		}
 	}
 }
 
 int main(){
 	printf("hello world\n");
 	Node root;
-	create_node_constant(&root,3);
-	print_ast(root);
+	Node a,b;
+	create_node_constant(&a , 1.0);
+	create_node_constant(&b , 1.0);
+	create_binary_node( &root, ADDITION,&a,&b);
+	print_ast(root,0);
 	return 0;
 }
