@@ -3,6 +3,7 @@
 typedef enum NodeType {
 	CONSTANT,
 	BINARY,
+	TERNARY,
 }NodeType;
 
 typedef enum ConstantType {
@@ -31,11 +32,23 @@ typedef struct Binary{
 	Node *b;
 }Binary;
 
+typedef enum TernaryType{
+	IFELSE,
+}TernaryType;
+
+typedef struct Ternary{
+	TernaryType type;
+	Node *a;
+	Node *b;
+	Node *c;
+}Ternary;
+
 struct Node{
 	NodeType type;
 	union {
 		Constant constant;
 		Binary binary;
+		Ternary ternary;
 	};
 };
 
@@ -53,6 +66,14 @@ void create_binary_node(Node *node, BinaryType type, Node *a, Node*b){
 	node->binary.b = b;
 }
 
+void create_ternary_node(Node *node, BinaryType type, Node *a, Node*b, Node* c){
+	node->type = TERNARY;
+	node->ternary.type = type;
+	node->ternary.a = a;
+	node->ternary.b = b;
+	node->ternary.c = c;
+}
+
 #define SPACING 3
 void print_ast(Node root, int level){
 	for (int i=0;i<level;i++){
@@ -63,10 +84,25 @@ void print_ast(Node root, int level){
 	}
 	if (root.type==BINARY){
 		printf("Binary operation");
-		if (root.binary.type == ADDITION){
-			printf(" addition:\n");
-			print_ast(*root.binary.a, level+SPACING);
-			print_ast(*root.binary.b, level+SPACING);
+		if (root.binary.a!=NULL && root.binary.b!=NULL){
+			if (root.binary.type == ADDITION){
+				printf(" addition:\n");
+				print_ast(*root.binary.a, level+SPACING);
+				print_ast(*root.binary.b, level+SPACING);
+			}
+		}
+	}
+	if (root.type==TERNARY){
+		printf("Ternary operation");
+		if (root.ternary.a!=NULL && root.ternary.b!=NULL && root.ternary.c!=NULL){
+			if (root.ternary.type == IFELSE){
+				printf("if:\n");
+				print_ast(*root.ternary.a, level+SPACING);
+				printf("then:\n");
+				print_ast(*root.ternary.b, level+SPACING);
+				printf("else:\n");
+				print_ast(*root.ternary.c, level+SPACING);
+			}
 		}
 	}
 }
