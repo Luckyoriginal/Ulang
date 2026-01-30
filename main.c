@@ -75,35 +75,49 @@ void create_ternary_node(Node *node, BinaryType type, Node *a, Node*b, Node* c){
 }
 
 #define SPACING 3
+
+void print_binary(Node root, int level);
+void print_ternary(Node root, int level);
 void print_ast(Node root, int level){
-	for (int i=0;i<level;i++){
-		printf(" ");
-	}
+	for (int i=0;i<level;i++){printf(" ");}
 	if (root.type==CONSTANT){
 		printf("CONSTANT: %f\n",root.constant.Float);
 	}
 	if (root.type==BINARY){
 		printf("Binary operation");
 		if (root.binary.a!=NULL && root.binary.b!=NULL){
-			if (root.binary.type == ADDITION){
-				printf(" addition:\n");
-				print_ast(*root.binary.a, level+SPACING);
-				print_ast(*root.binary.b, level+SPACING);
-			}
+			print_binary(root , level);
 		}
 	}
 	if (root.type==TERNARY){
 		printf("Ternary operation");
 		if (root.ternary.a!=NULL && root.ternary.b!=NULL && root.ternary.c!=NULL){
-			if (root.ternary.type == IFELSE){
-				printf("if:\n");
-				print_ast(*root.ternary.a, level+SPACING);
-				printf("then:\n");
-				print_ast(*root.ternary.b, level+SPACING);
-				printf("else:\n");
-				print_ast(*root.ternary.c, level+SPACING);
-			}
+			print_ternary(root , level);
 		}
+		
+	}
+}
+
+void print_binary(Node root, int level){
+	for (int i=0;i<level;i++){printf(" ");}
+	if (root.binary.type == ADDITION){
+		printf(" addition:\n");
+		print_ast(*root.binary.a, level+SPACING);
+		print_ast(*root.binary.b, level+SPACING);
+	}
+}
+
+void print_ternary(Node root, int level){
+	for (int i=0;i<level;i++){printf(" ");}
+	if (root.ternary.type == IFELSE){
+		printf("if:\n");
+		print_ast(*root.ternary.a, level+SPACING);
+		for (int i=0;i<level;i++){printf(" ");}
+		printf("then:\n");
+		print_ast(*root.ternary.b, level+SPACING);
+		for (int i=0;i<level;i++){printf(" ");}
+		printf("else:\n");
+		print_ast(*root.ternary.c, level+SPACING);
 	}
 }
 
