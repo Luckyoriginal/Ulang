@@ -28,13 +28,13 @@ void print_ast(Node root, int level){
 		printf("CONSTANT: %f\n",root.constant.Float);
 	}
 	if (root.type==BINARY){
-		printf("Binary operation");
+		printf("Binary operation ");
 		if (root.binary.a!=NULL && root.binary.b!=NULL){
 			print_binary(root , level);
 		}
 	}
 	if (root.type==TERNARY){
-		printf("Ternary operation");
+		printf("Ternary operation ");
 		if (root.ternary.a!=NULL && root.ternary.b!=NULL && root.ternary.c!=NULL){
 			print_ternary(root , level);
 		}
@@ -46,7 +46,7 @@ void print_ast(Node root, int level){
 void print_binary(Node root, int level){
 	for (int i=0;i<level;i++){printf(" ");}
 	if (root.binary.type == ADDITION){
-		printf(" addition:\n");
+		printf("addition:\n");
 		print_ast(*root.binary.a, level+SPACING);
 		print_ast(*root.binary.b, level+SPACING);
 	}

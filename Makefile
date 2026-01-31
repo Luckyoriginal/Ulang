@@ -1,5 +1,6 @@
 CC=gcc
 
+all:out
 ast.o: ast.c
 	$(CC) -c ast.c -o ast.o
 
