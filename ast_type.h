@@ -1,14 +1,28 @@
 #ifndef AST_TYPE
 #define AST_TYPE
+#define MAX_NAME_LENGTH 128
+//--------enum here----------//
 typedef enum NodeType {
 	CONSTANT,
 	BINARY,
 	TERNARY,
+	VARIABLE,
 }NodeType;
 
 typedef enum ConstantType {
 	FLOAT, INT, STRING, CHAR
 }ConstantType;
+
+typedef enum BinaryType{
+	ADDITION,
+}BinaryType;
+
+typedef enum TernaryType{
+	IFELSE,
+}TernaryType;
+
+//--------struct here----------//
+typedef struct Node Node;
 
 typedef struct Constant {
 	ConstantType type;
@@ -20,21 +34,11 @@ typedef struct Constant {
 	};
 }Constant;
 
-typedef struct Node Node;
-
-typedef enum BinaryType{
-	ADDITION,
-}BinaryType;
-
 typedef struct Binary{
 	BinaryType type;
 	Node *a;
 	Node *b;
 }Binary;
-
-typedef enum TernaryType{
-	IFELSE,
-}TernaryType;
 
 typedef struct Ternary{
 	TernaryType type;
@@ -43,12 +47,18 @@ typedef struct Ternary{
 	Node *c;
 }Ternary;
 
+typedef struct Variable{
+	ConstantType type;
+	char name[MAX_NAME_LENGTH];
+}Variable;
+
 struct Node{
 	NodeType type;
 	union {
 		Constant constant;
 		Binary binary;
 		Ternary ternary;
+		Variable variable;
 	};
 };
 
