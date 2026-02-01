@@ -29,6 +29,39 @@ void create_variable_node(Node *node, ConstantType type, const char name[MAX_NAM
 	strcpy(node->variable.name, name);
 }
 
+//---- debug function here ----//
+void print_binary(Node root, int level){
+	for (int i=0;i<level;i++){printf(" ");}
+	if (root.binary.type == ADDITION){
+		printf("addition:\n");
+		print_ast(*root.binary.a, level+SPACING);
+		print_ast(*root.binary.b, level+SPACING);
+	}
+	if (root.binary.type == SEQUENCE){
+		print_ast(*root.binary.a, level);
+		print_ast(*root.binary.b, level);
+	}
+}
+
+void print_ternary(Node root, int level){
+	for (int i=0;i<level;i++){printf(" ");}
+	if (root.ternary.type == IFELSE){
+		printf("if:\n");
+		print_ast(*root.ternary.a, level+SPACING);
+		for (int i=0;i<level;i++){printf(" ");}
+		printf("then:\n");
+		print_ast(*root.ternary.b, level+SPACING);
+		for (int i=0;i<level;i++){printf(" ");}
+		printf("else:\n");
+		print_ast(*root.ternary.c, level+SPACING);
+	}
+}
+
+void print_variable(Node root, int level){
+	for (int i=0;i<level;i++){printf(" ");}
+	printf("variable: %s\n",root.variable.name);
+}
+
 void print_ast(Node root, int level){
 	for (int i=0;i<level;i++){printf(" ");}
 	switch (root.type) {
@@ -55,7 +88,6 @@ void print_ast(Node root, int level){
 			break;
 
 		default:
-			// Optional: handle unknown node types
 			fprintf(stderr, "Unknown AST node type!\n");
 			break;
 	}
@@ -63,30 +95,4 @@ void print_ast(Node root, int level){
 }
 
 
-void print_binary(Node root, int level){
-	for (int i=0;i<level;i++){printf(" ");}
-	if (root.binary.type == ADDITION){
-		printf("addition:\n");
-		print_ast(*root.binary.a, level+SPACING);
-		print_ast(*root.binary.b, level+SPACING);
-	}
-}
 
-void print_ternary(Node root, int level){
-	for (int i=0;i<level;i++){printf(" ");}
-	if (root.ternary.type == IFELSE){
-		printf("if:\n");
-		print_ast(*root.ternary.a, level+SPACING);
-		for (int i=0;i<level;i++){printf(" ");}
-		printf("then:\n");
-		print_ast(*root.ternary.b, level+SPACING);
-		for (int i=0;i<level;i++){printf(" ");}
-		printf("else:\n");
-		print_ast(*root.ternary.c, level+SPACING);
-	}
-}
-
-void print_variable(Node root, int level){
-	for (int i=0;i<level;i++){printf(" ");}
-	printf("variable: %s\n",root.variable.name);
-}

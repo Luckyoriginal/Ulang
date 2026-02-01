@@ -14,7 +14,7 @@ typedef enum ConstantType {
 }ConstantType;
 
 typedef enum BinaryType{
-	ADDITION,
+	ADDITION, SEQUENCE
 }BinaryType;
 
 typedef enum TernaryType{
@@ -22,6 +22,7 @@ typedef enum TernaryType{
 }TernaryType;
 
 //--------struct here----------//
+
 typedef struct Node Node;
 
 typedef struct Constant {

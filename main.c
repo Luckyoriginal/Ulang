@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include "ast.h"
 #include "ast_type.h"
+#include "parser.h"
 
-int main(){
-	Node root;
-	Node a,b,c;
-	create_constant_node(&a , 1.0);
-	create_constant_node(&b , 2.0);
-	create_constant_node(&c , 3.0);
-	Node x;
-	create_variable_node(&x,INT,"x");
-	create_ternary_node( &root, IFELSE,&a,&b, &x);
-	print_ast(root,0);
+int main(int argc, char *argv[]){
+	char buffer[100000];
+	char* cursor = buffer;
+	while (--argc >0){
+		open_file(argv[argc],buffer);
+		parse_file(&cursor);
+	}
 	return 0;
 }
