@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "hashdict.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -55,22 +56,22 @@ int parse_identifier(char **buffer, char *identifier){
 	return 1;
 }
 
-int parse_file(char **buffer){
+int parse_file(char **buffer, struct dictionary* dic){
 	//every file must begin with module:
-	char module_name[100];
-	check(parse_module(buffer,module_name), "every file should begin with \"module\"");
-	printf("DEBUG:  module is '%s'\n",module_name);
+	check(parse_module(buffer, dic), "every file should begin with \"module\"");
 	return 1;
 }
 
-int parse_module(char **buffer, char* module_name){
+int parse_module(char **buffer, struct dictionary* dic){
 	skip_blank(buffer);
 	int success = 0;
 	success = parse_word(buffer,"module");
 	if (success == 0){ return 0;}
 	skip_blank(buffer);
+	char module_name[100];
 	check(parse_identifier(buffer, module_name),"module must have name \n");
-
+	dic_add(dic , module_name, strlen(module_name));
+	*dic->value = (Identifier){type:MODULE};
 }
 
 int open_file(const char* filename, char* buffer) {
