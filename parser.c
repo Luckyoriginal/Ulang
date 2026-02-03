@@ -51,18 +51,19 @@ int parse_identifier(char **buffer, char *identifier){
 		return 0;
 	}
 	memcpy(identifier, *buffer, i*buffer_byte);
-	identifier[i] = '\0';
+	identifier[i-1] = '\0';
 	*buffer += i*buffer_byte;  
 	return 1;
 }
 
 int parse_file(char **buffer, struct dictionary* dic){
 	//every file must begin with module:
-	check(parse_module(buffer, dic), "every file should begin with \"module\"");
+	Node* root = dynarray_create(Node);
+	check(parse_module(buffer, dic, root), "every file should begin with \"module\"");
 	return 1;
 }
 
-int parse_module(char **buffer, struct dictionary* dic){
+int parse_module(char **buffer, struct dictionary* dic, Node* node){
 	skip_blank(buffer);
 	int success = 0;
 	success = parse_word(buffer,"module");
@@ -70,7 +71,7 @@ int parse_module(char **buffer, struct dictionary* dic){
 	skip_blank(buffer);
 	char module_name[100];
 	check(parse_identifier(buffer, module_name),"module must have name \n");
-	dic_add(dic , module_name, strlen(module_name));
+	dic_add(dic , module_name, strlen(module_name)+1);//remember +1 for '\0' !!!!
 	*dic->value = (Identifier){type:MODULE};
 }
 

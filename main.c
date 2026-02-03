@@ -11,7 +11,7 @@ void compile(char* buffer){
 }
 
 int print_hash(void *key, int count, Identifier* value, void* user){
-	printf("found %s\n of type %d",(char*)key, value->type);
+	printf("found %s of type %d",(char*)key, value->type);
 }
 
 int main(int argc, char *argv[]){

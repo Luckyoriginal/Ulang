@@ -2,6 +2,9 @@ CC=gcc
 
 all:out
 
+dynarray.o: dynarray.c
+	$(CC) -c dynarray.c -o dynarray.o
+
 hashdict.o: hashdict.c
 	$(CC) -c hashdict.c -o hashdict.o
 
@@ -14,5 +17,5 @@ ast.o: ast.c
 parser.o: parser.c
 	$(CC) -c parser.c -o parser.o
 
-out: main.c ast.o parser.o arena.o hashdict.o
-	$(CC) main.c ast.o parser.o arena.o hashdict.o -o out
+out: main.c ast.o parser.o arena.o hashdict.o dynarray.o
+	$(CC) main.c ast.o parser.o arena.o hashdict.o dynarray.o -o out

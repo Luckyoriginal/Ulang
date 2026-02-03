@@ -1,7 +1,8 @@
 #ifndef PARSER
 #define PARSER
 #include "hashdict.h"
-
+#include "ast_type.h"
+#include "dynarray.h"
 #define buffer_byte 1 //this is in case we want non UTF-8 file format
 //file utility that copy file to buffer
 int open_file(const char* filename, char* buffer);
@@ -14,5 +15,5 @@ int parse_identifier(char **buffer, char *identifier);
 
 //parsing function 
 int parse_file(char **buffer,struct dictionary* dic);
-int parse_module(char **buffer,struct dictionary* dic);
+int parse_module(char **buffer,struct dictionary* dic, Node* node);
 #endif 

@@ -10,7 +10,7 @@ typedef enum NodeType {
 }NodeType;
 
 typedef enum ConstantType {
-	FLOAT, INT, STRING, CHAR
+	VOID, FLOAT, INT, STRING, CHAR
 }ConstantType;
 
 typedef enum BinaryType{
@@ -34,6 +34,13 @@ typedef struct Constant {
 		char Char;
 	};
 }Constant;
+
+#define MAX_ARGUMENT 10
+typedef struct Function {
+	ConstantType return_type;
+	unsigned int n_argument;
+	ConstantType arguments[MAX_ARGUMENT];
+}Function;
 
 typedef struct Binary{
 	BinaryType type;
