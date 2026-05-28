@@ -4,13 +4,17 @@
 //token structure 
 typedef enum {
 	TOKEN_IDENTIFIER,
+	TOKEN_NUMBER,
+
 	TOKEN_LBRACKET,
 	TOKEN_RBRACKET,
+	
+	TOKEN_TYPE_INT,
 }TokenType;
 
 typedef struct {
 	TokenType type;
-	char lexem[64];
+	char lexeme[64];
 }Token;
 
 //lexer structure:
