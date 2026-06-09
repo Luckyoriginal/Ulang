@@ -1,7 +1,6 @@
 #include "lexer.h"
 #include "lexer_util.h"
 #include <string.h>
-#include <stdio.h>
 
 void LexerInit(Lexer *l, const char *source){
 	l->current_char = source[0];
@@ -20,7 +19,7 @@ Token LexerNextToken(Lexer *l){
 	
 	LexerUtilSkipWhiteSpace(l);
 
-	//if it is a single character token
+	//must be in this order:
 	if (LexerUtilSingleCharacter(l, &token)){return token;}
 
 	if (LexerUtilNumber(l , &token)){
@@ -35,7 +34,5 @@ Token LexerNextToken(Lexer *l){
 			return token;
 		}
 	}
-
-	printf("error, token not recognized\n");
 	return token;
 }

@@ -1,0 +1,7 @@
+
+type Position struct{
+	int x;
+	int y;
+}
+
+func test(int x, int y)

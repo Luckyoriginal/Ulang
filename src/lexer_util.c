@@ -21,6 +21,33 @@ bool LexerUtilSingleCharacter(Lexer *lexer, Token* token){
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;
+		case(';'): 
+			token->type = TOKEN_SEMICOLON;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
+		case(','): 
+			token->type = TOKEN_COMMA;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
+
+		case('{'): 
+			token->type = TOKEN_LBRACE;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
+		case('}'): 
+			token->type = TOKEN_RBRACE;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
+		case('\0'): 
+			token->type = TOKEN_EOF;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
+
 		default:
 			return false;
 	}
@@ -63,9 +90,22 @@ bool LexerUtilNumber(Lexer *l, Token *token){
 }
 
 bool LexerIsReserved(Token *token){
-	if (strcmp(token->lexeme, "int")==0){
-		token->type = TOKEN_TYPE_INT;
+	if (strcmp(token->lexeme, "struct")==0){
+		token->type = TOKEN_STRUCT;
 		return true;
 	}
+	if (strcmp(token->lexeme, "enum")==0){
+		token->type = TOKEN_ENUM;
+		return true;
+	}
+	if (strcmp(token->lexeme, "func")==0){
+		token->type = TOKEN_FUNC;
+		return true;
+	}
+	if (strcmp(token->lexeme, "type")==0){
+		token->type = TOKEN_TYPE;
+		return true;
+	}
+
 	return false;
 }
