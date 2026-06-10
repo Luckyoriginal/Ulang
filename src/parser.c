@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_FIELDS 256 // Ensure you have a limit!

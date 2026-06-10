@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "lexer.h"
 #include "parser.h"
+#include "parser_util.h"
 
 char* ReadFileToString(const char* filename) {
 	FILE* file = fopen(filename, "rb");
@@ -49,13 +50,16 @@ int main(int argc, char** argv) {
 	Parser parser;
 	ParserInit(&parser, &lexer);
 	
+	ParseExpression(&parser);
 	Compiler compiler;
 	InitCompiler(&compiler);
-
+	
 	ParseFile(&compiler, &parser);
 	
 	printf("structures: %d\n",compiler.structure_count);
 	printf("functions: %d\n",compiler.function_count);
+
+	PrintCompilerDebug(&compiler);
 	free(source_code);
 
 	return 0;

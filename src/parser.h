@@ -44,6 +44,51 @@ typedef struct {
 	char return_type[64];
 }AST_Function_Definition;
 
+//expression parsing:
+
+typedef enum {
+	UNARY,
+	BINARY,
+	TERNARY,
+	PRIMARY,
+}ExpressionType;
+
+typedef enum {
+	OP_NONE,
+	OP_ADD,
+	OP_MINUS,
+	OP_NEG,
+	OP_MUL,
+}OperationType;
+
+typedef struct AST_Expression AST_Expression;
+struct AST_Expression {
+	ExpressionType type;
+	union {
+		struct{
+			OperationType type; //2 because it can be ++ for example
+			AST_Expression* node;
+		}unary;
+
+		struct{
+			OperationType type;
+			AST_Expression* left_node;
+			AST_Expression* right_node;
+		}binary;
+
+		struct{
+			OperationType type; 
+			AST_Expression* first_node;
+			AST_Expression* second_node;
+			AST_Expression* third_node;
+		}ternary;
+
+		struct {
+			char value[25];
+		}constant;
+	}as;
+};
+
 //compiler parsing
 typedef struct {
 	AST_Struct_Definition structure[MAX_COUNT];
@@ -57,5 +102,5 @@ void ParseFile(Compiler* c, Parser* p);
 
 bool ParseTypeDefinition(Parser* parser, Compiler* c);
 bool ParseFunctionDefinition(Parser* parser, Compiler* c);
-
+AST_Expression* ParseExpression(Parser* parser);
 #endif
