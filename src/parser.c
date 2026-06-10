@@ -66,9 +66,9 @@ bool ParseTypeDefinition(Parser* parser, Compiler* c) {
 
 	if (parser->current_token.type == TOKEN_STRUCT){
 		ParserAdvance(parser);
-		if (!ParserExpectedToken(parser, TOKEN_LBRACE, "Expected '{' to open struct")) return false;
+		if (!ParserExpectedToken(parser, TOKEN_LPARENTHESIS, "Expected '{' to open struct")) return false;
 
-		while (parser->current_token.type != TOKEN_RBRACE && parser->current_token.type != TOKEN_EOF) {
+		while (parser->current_token.type != TOKEN_RPARENTHESIS && parser->current_token.type != TOKEN_EOF) {
 			AST_Struct_Definition* struct_definition = &c->structure[c->structure_count];
 			strcpy(struct_definition->struct_name,name);
 			if (struct_definition->field_count >= MAX_FIELDS) {
@@ -83,7 +83,7 @@ bool ParseTypeDefinition(Parser* parser, Compiler* c) {
 			struct_definition->field_count++;
 		}
 
-		if (!ParserExpectedToken(parser, TOKEN_RBRACE, "Expected '}' to close struct")) return false;
+		if (!ParserExpectedToken(parser, TOKEN_RPARENTHESIS, "Expected '}' to close struct")) return false;
 
 		if (c->structure_count<MAX_COUNT){
 			c->structure_count++;

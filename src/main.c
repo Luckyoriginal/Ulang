@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lexer.h"
+#include "parse_expression.h"
 #include "parser.h"
 #include "parser_util.h"
 
@@ -50,7 +51,8 @@ int main(int argc, char** argv) {
 	Parser parser;
 	ParserInit(&parser, &lexer);
 	
-	ParseExpression(&parser);
+	AST_Expression *expression=ParseExpression(&parser);
+	DebugPrintAST(expression);
 	Compiler compiler;
 	InitCompiler(&compiler);
 	

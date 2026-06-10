@@ -12,12 +12,12 @@ void LexerUtilSkipWhiteSpace(Lexer *lexer){
 bool LexerUtilSingleCharacter(Lexer *lexer, Token* token){
 	switch (lexer->current_char) {
 		case('('): 
-			token->type = TOKEN_LBRACKET;
+			token->type = TOKEN_LPARENTHESIS;
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;
 		case(')'): 
-			token->type = TOKEN_RBRACKET;
+			token->type = TOKEN_RPARENTHESIS;
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;
