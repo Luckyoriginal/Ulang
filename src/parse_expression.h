@@ -1,7 +1,9 @@
 #ifndef PARSE_EXPRESSION
 #define PARSE_EXPRESSION
 #include "lexer.h"
+#include "ast.h"
 #include "parser.h"
+#include "compiler.h"
 
 typedef enum {
 	PREC_NONE,
@@ -15,10 +17,10 @@ typedef enum {
 
 Precedence GetTokenPrecendence(TokenType type);
 
-AST_Expression* ParsePrefix(Parser* parser);
-AST_Expression* ParseInfix(Parser* parser,AST_Expression* left);
+unsigned int ParsePrefix(Parser* parser, Compiler* c);
+unsigned int ParseInfix(Parser* parser, Compiler* c,unsigned int left);
 
-AST_Expression* ParseExpressionPrec(Parser* parser, Precedence precedence);
-AST_Expression* ParseExpression(Parser* parser);
-void DebugPrintAST(AST_Expression* expr);
+unsigned int ParseExpressionPrec(Parser* parser, Compiler* c, Precedence precedence);
+unsigned int ParseExpression(Parser* parser, Compiler* c);
+//void DebugPrintAST(AST_Expression* expr);
 #endif

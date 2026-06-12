@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "compiler.h"
+#include "debug.h"
 #include "lexer.h"
 #include "parse_expression.h"
 #include "parser.h"
@@ -50,19 +52,13 @@ int main(int argc, char** argv) {
 
 	Parser parser;
 	ParserInit(&parser, &lexer);
-	
-	AST_Expression *expression=ParseExpression(&parser);
-	DebugPrintAST(expression);
+
 	Compiler compiler;
-	InitCompiler(&compiler);
-	
-	ParseFile(&compiler, &parser);
-	
-	printf("structures: %d\n",compiler.structure_count);
-	printf("functions: %d\n",compiler.function_count);
+	CompilerInit(&compiler);
 
-	PrintCompilerDebug(&compiler);
-	free(source_code);
-
+	unsigned int expr= ParseExpression(&parser, &compiler);
+	printf("count=%d\n",compiler.count);
+	print_ast(compiler, expr);
+	CompilerFree(&compiler);
 	return 0;
 }
