@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "compiler.h"
 #include "debug.h"
 #include "lexer.h"
@@ -57,7 +58,7 @@ int main(int argc, char** argv) {
 
 	unsigned int expr= ParseExpression(&parser, &compiler);
 	printf("count=%d\n",compiler.count);
-	print_ast(compiler, expr);
+	print_ast(&compiler, expr);
 	CompilerFree(&compiler);
 	return 0;
 }

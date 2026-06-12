@@ -34,6 +34,15 @@ bool ParserCheck(Parser *parser, TokenType expected_type) {
 	}
 }
 
+bool ParserCheckConsume(Parser *parser, TokenType expected_type) {
+	if (parser->current_token.type == expected_type) {
+		ParserAdvance(parser);
+		return true;
+	}else{
+		return false;
+	}
+}
+
 void ParserConsume(Parser* parser, TokenType expected_type, const char* error_msg){	//check, must match and consume
 	if (parser->current_token.type != expected_type) {
 		ParserReportError(parser, error_msg);

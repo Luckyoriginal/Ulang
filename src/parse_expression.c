@@ -70,7 +70,7 @@ unsigned int ParseNumber(Parser* parser, Compiler* c) {
 	unsigned int id = NewNode(c);
 	AST_Node* node = &c->AST_Tree[id];
 	node->type = AST_Constant;
-	node->as.Constant.token = parser->current_token;
+	node->as.constant.token = parser->current_token;
 	ParserAdvance(parser);
 	return id;
 }
@@ -78,15 +78,38 @@ unsigned int ParseNumber(Parser* parser, Compiler* c) {
 unsigned int ParseVariable(Parser* parser, Compiler* c) {
 	unsigned int id = NewNode(c);
 	AST_Node* node = &c->AST_Tree[id];
-	node->type = AST_Variable;
+	node->type = AST_Variable; //first, assume it is a simple identifier (ex: x)
+	node->as.variable.is_function = false; //is not a function (for now)
 	node->as.variable.token = parser->current_token;
-	ParserAdvance(parser);
-	if (ParserCheck(parser, TOKEN_DOT)){
+
+	Token token = parser->current_token;//we will use it for the branches
+
+	while(1){
 		ParserAdvance(parser);
-		ParserMatch(parser , TOKEN_IDENTIFIER, "expected identifier");
-		node->as.variable.field = ParseVariable(parser , c);
-	}else{
-		node->as.variable.field = -1;
+		if (ParserCheck(parser, TOKEN_LPARENTHESIS)){ //if it has parenthesis, it is surely a function (x(something))
+			node->as.variable.is_function = true; // it is a function
+
+			ParserAdvance(parser);
+			if (!ParserCheck(parser, TOKEN_RPARENTHESIS)){
+				do{
+					node->as.variable.parameters[node->as.variable.parameter_count] = ParseExpression(parser,c);
+					node->as.variable.parameter_count++; //adding parameters
+				}while(ParserCheckConsume(parser , TOKEN_COMMA));
+			}
+			ParserMatch(parser, TOKEN_RPARENTHESIS, "expected ')'");
+		}
+
+		if (ParserCheck(parser, TOKEN_DOT)){//if it has a dot after, it is a structure (ex: x.something)
+			ParserAdvance(parser);
+			ParserMatch(parser , TOKEN_IDENTIFIER, "expected identifier");
+			node->as.variable.field = ParseVariable(parser , c);
+
+		}else {
+			node->as.variable.field = -1;
+		}
+		if (!ParserCheck(parser, TOKEN_RPARENTHESIS)&&!ParserCheck(parser, TOKEN_DOT)){
+			break;
+		}
 	}
 	return id;
 }

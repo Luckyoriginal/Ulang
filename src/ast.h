@@ -42,12 +42,15 @@ typedef struct {
 
 		struct {
 			Token token;
+			bool is_function;
 			unsigned int field; //for structure variable
+			unsigned int parameter_count;
+			unsigned int parameters[MAX_FIELD];
 		}variable;
 
 		struct {
 			Token token;
-		}Constant;
+		}constant;
 
 		struct {
 			Token Name;
