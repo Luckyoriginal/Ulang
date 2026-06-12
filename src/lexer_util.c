@@ -31,6 +31,11 @@ bool LexerUtilSingleCharacter(Lexer *lexer, Token* token){
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;
+		case('.'): 
+			token->type = TOKEN_DOT;
+			token->lexeme[0] = lexer->current_char;
+			LexerAdvance(lexer);
+			return true;
 		case('+'): 
 			token->type = TOKEN_PLUS;
 			token->lexeme[0] = lexer->current_char;

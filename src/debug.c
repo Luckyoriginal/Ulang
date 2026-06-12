@@ -25,7 +25,7 @@ static void print_indent(int indent_level) {
 static void print_token(Token t) {
     // Replace with your actual token printing logic, e.g.:
     // printf("%.*s", t.length, t.start);
-    printf("<token>"); 
+    printf("<token>%s", t.lexeme); 
 }
 
 void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
@@ -57,6 +57,10 @@ void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
         case AST_Variable:
             printf("Variable: ");
             print_token(node->as.variable.token);
+	    if (node->as.variable.field != -1){
+		    printf("\nwith field:\n ");
+		    print_ast_node(c, node->as.variable.field, indent + 1);
+	    }
             printf("\n");
             break;
 
@@ -64,14 +68,6 @@ void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
             printf("Constant: ");
             print_token(node->as.Constant.token);
             printf("\n");
-            break;
-
-        case AST_StructField:
-            printf("StructField (Struct: ");
-            print_token(node->as.struct_field.structure);
-            printf(", Field: ");
-            print_token(node->as.struct_field.field_name);
-            printf(")\n");
             break;
 
         case AST_StructDef:

@@ -5,7 +5,6 @@
 #include "lexer.h"
 #include "parse_expression.h"
 #include "parser.h"
-#include "parser_util.h"
 
 char* ReadFileToString(const char* filename) {
 	FILE* file = fopen(filename, "rb");

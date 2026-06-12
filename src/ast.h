@@ -1,7 +1,8 @@
 #ifndef AST_H
 #define AST_H
 #include "lexer.h"
-#define MAX_FIELD
+#define MAX_FIELD 32
+
 typedef enum {
 	OP_NONE,
 	//unary
@@ -19,7 +20,6 @@ typedef enum {
 	AST_Binary,		
 	AST_Variable,		
 	AST_Constant,		
-	AST_StructField,		
 	AST_StructDef,		
 	AST_FieldDef,		
 }AST_NodeType;
@@ -42,16 +42,12 @@ typedef struct {
 
 		struct {
 			Token token;
+			unsigned int field; //for structure variable
 		}variable;
 
 		struct {
 			Token token;
 		}Constant;
-
-		struct {
-			Token structure;
-			Token field_name;
-		}struct_field;
 
 		struct {
 			Token Name;

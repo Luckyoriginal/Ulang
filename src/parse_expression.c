@@ -20,6 +20,7 @@ typedef struct {
 
 // Forward declarations for the table
 unsigned int ParseNumber(Parser* parser, Compiler* c);
+unsigned int ParseVariable(Parser* parser, Compiler* c);
 unsigned int ParseGrouping(Parser* parser, Compiler* c);
 unsigned int ParseUnary(Parser* parser, Compiler* c);
 unsigned int ParseInfix(Parser* parser,Compiler*c, unsigned int left);
@@ -28,6 +29,7 @@ ParseRule rules[] = {
 	[TOKEN_LPARENTHESIS] = {ParseGrouping, NULL,PREC_NONE},
 	[TOKEN_RPARENTHESIS] = {NULL, NULL,PREC_NONE},
 
+	[TOKEN_IDENTIFIER] = {ParseVariable, NULL,       PREC_NONE},
 	[TOKEN_NUMBER] = {ParseNumber, NULL,       PREC_NONE},
 	[TOKEN_MINUS]  = {ParseUnary,  ParseInfix, PREC_TERM},
 	[TOKEN_PLUS]   = {NULL,        ParseInfix, PREC_TERM},
@@ -73,6 +75,21 @@ unsigned int ParseNumber(Parser* parser, Compiler* c) {
 	return id;
 }
 
+unsigned int ParseVariable(Parser* parser, Compiler* c) {
+	unsigned int id = NewNode(c);
+	AST_Node* node = &c->AST_Tree[id];
+	node->type = AST_Variable;
+	node->as.variable.token = parser->current_token;
+	ParserAdvance(parser);
+	if (ParserCheck(parser, TOKEN_DOT)){
+		ParserAdvance(parser);
+		ParserMatch(parser , TOKEN_IDENTIFIER, "expected identifier");
+		node->as.variable.field = ParseVariable(parser , c);
+	}else{
+		node->as.variable.field = -1;
+	}
+	return id;
+}
 
 unsigned int ParseUnary(Parser* parser, Compiler *c) {
 	ParserAdvance(parser); // consume operator 

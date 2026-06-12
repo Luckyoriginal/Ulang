@@ -6,8 +6,6 @@
 #include <string.h>
 #include "dynarray.h"
 
-#define MAX_FIELDS 256 // Ensure you have a limit!
-		       //
 void ParserInit(Parser *parser, Lexer *lexer){
 	parser->lexer = lexer;
 	parser->current_token = LexerNextToken(lexer);
