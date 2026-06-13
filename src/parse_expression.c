@@ -19,12 +19,6 @@ typedef struct {
 } ParseRule;
 
 // Forward declarations for the table
-unsigned int ParseNumber(Parser* parser, Compiler* c);
-unsigned int ParseVariable(Parser* parser, Compiler* c);
-unsigned int ParseGrouping(Parser* parser, Compiler* c);
-unsigned int ParseUnary(Parser* parser, Compiler* c);
-unsigned int ParseInfix(Parser* parser,Compiler*c, unsigned int left);
-
 ParseRule rules[] = {
 	[TOKEN_LPARENTHESIS] = {ParseGrouping, NULL,PREC_NONE},
 	[TOKEN_RPARENTHESIS] = {NULL, NULL,PREC_NONE},
@@ -84,30 +78,36 @@ unsigned int ParseVariable(Parser* parser, Compiler* c) {
 
 	Token token = parser->current_token;//we will use it for the branches
 
+	ParserAdvance(parser);
 	while(1){
-		ParserAdvance(parser);
+		node = &c->AST_Tree[id];
 		if (ParserCheck(parser, TOKEN_LPARENTHESIS)){ //if it has parenthesis, it is surely a function (x(something))
 			node->as.variable.is_function = true; // it is a function
 
 			ParserAdvance(parser);
-			if (!ParserCheck(parser, TOKEN_RPARENTHESIS)){
+			if (!ParserCheck(parser, TOKEN_RPARENTHESIS)){ //if it is not empty argument function
 				do{
-					node->as.variable.parameters[node->as.variable.parameter_count] = ParseExpression(parser,c);
+					unsigned int param_node = ParseExpression(parser, c);
+					node = &c->AST_Tree[id];
+					node->as.variable.parameters[node->as.variable.parameter_count] = param_node;
 					node->as.variable.parameter_count++; //adding parameters
 				}while(ParserCheckConsume(parser , TOKEN_COMMA));
 			}
-			ParserMatch(parser, TOKEN_RPARENTHESIS, "expected ')'");
+			ParserConsume(parser, TOKEN_RPARENTHESIS, "expected ')'");
 		}
 
+		node = &c->AST_Tree[id];
 		if (ParserCheck(parser, TOKEN_DOT)){//if it has a dot after, it is a structure (ex: x.something)
 			ParserAdvance(parser);
 			ParserMatch(parser , TOKEN_IDENTIFIER, "expected identifier");
-			node->as.variable.field = ParseVariable(parser , c);
+			unsigned int field_node = ParseVariable(parser , c);
+			node = &c->AST_Tree[id];
+			node->as.variable.field = field_node;
 
 		}else {
 			node->as.variable.field = -1;
 		}
-		if (!ParserCheck(parser, TOKEN_RPARENTHESIS)&&!ParserCheck(parser, TOKEN_DOT)){
+		if (!ParserCheck(parser, TOKEN_LPARENTHESIS)&&!ParserCheck(parser, TOKEN_DOT)){
 			break;
 		}
 	}

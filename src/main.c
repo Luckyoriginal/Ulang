@@ -5,6 +5,7 @@
 #include "debug.h"
 #include "lexer.h"
 #include "parse_expression.h"
+#include "parse_statement.h"
 #include "parser.h"
 
 char* ReadFileToString(const char* filename) {
@@ -56,8 +57,9 @@ int main(int argc, char** argv) {
 	Compiler compiler;
 	CompilerInit(&compiler);
 
-	unsigned int expr= ParseExpression(&parser, &compiler);
-	printf("count=%d\n",compiler.count);
+	//unsigned int expr= ParseExpression(&parser, &compiler);
+	//printf("count=%d\n",compiler.count);
+	unsigned int expr = ParseBlock(&parser, &compiler);
 	print_ast(&compiler, expr);
 	CompilerFree(&compiler);
 	return 0;

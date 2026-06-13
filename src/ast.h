@@ -22,6 +22,9 @@ typedef enum {
 	AST_Constant,		
 	AST_StructDef,		
 	AST_FieldDef,		
+	//statement
+	AST_StatementEqual,
+	AST_Block,
 }AST_NodeType;
 
 
@@ -51,6 +54,16 @@ typedef struct {
 		struct {
 			Token token;
 		}constant;
+		
+		struct {
+			unsigned int left;
+			unsigned int right;
+		}statement_equal;
+
+		struct {
+			unsigned int statement;
+			unsigned int next;
+		}block;
 
 		struct {
 			Token Name;

@@ -2,6 +2,7 @@
 #include "ast.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void CompilerInit(Compiler *c) {
 	c->AST_Tree = malloc(sizeof(AST_Node));
@@ -29,6 +30,7 @@ unsigned int NewNode(Compiler *c) {
 	}
 
 	unsigned int node_index = c->count;
+	memset(&c->AST_Tree[node_index], 0, sizeof(AST_Node));
 	c->count++;
 
 	return node_index;

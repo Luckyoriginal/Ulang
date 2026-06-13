@@ -62,12 +62,12 @@ bool LexerUtilSingleCharacter(Lexer *lexer, Token* token){
 			LexerAdvance(lexer);
 			return true;
 		case('{'): 
-			token->type = TOKEN_LBRACE;
+			token->type = TOKEN_LBRACKET;
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;
 		case('}'): 
-			token->type = TOKEN_RBRACE;
+			token->type = TOKEN_RBRACKET;
 			token->lexeme[0] = lexer->current_char;
 			LexerAdvance(lexer);
 			return true;

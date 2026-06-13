@@ -61,9 +61,8 @@ void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
         case AST_Variable:
             printf("Variable [");
             print_token(node->as.variable.token);
-            printf("]\n"); // Clean newline
+            printf("]\n"); 
 
-            // Explicitly check against max unsigned value
             if (node->as.variable.field != UINT_MAX) {
                 print_indent(indent + 1);
                 printf("-> Field Access:\n");
@@ -84,7 +83,13 @@ void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
             print_token(node->as.constant.token);
             printf("]\n");
             break;
-    
+            
+        case AST_StatementEqual:
+            printf("StatementEqual [=]\n");
+            print_ast_node(c, node->as.statement_equal.left, indent + 1);
+            print_ast_node(c, node->as.statement_equal.right, indent + 1);
+            break;
+
         case AST_StructDef:
             printf("StructDef [");
             print_token(node->as.struct_def.Name);
@@ -100,6 +105,23 @@ void print_ast_node(const Compiler* c, unsigned int node_idx, int indent) {
             printf("] Type: ");
             print_token(node->as.fields_def.Type);
             printf("\n");
+            break;
+
+        // --- NEW BLOCK HANDLING ---
+        case AST_Block:
+            printf("BlockNode\n");
+            
+            // Print the current statement in the block
+            print_indent(indent + 1);
+            printf("-> Statement:\n");
+            print_ast_node(c, node->as.block.statement, indent + 2);
+
+            // Print the rest of the block sequence, avoiding 'Invalid Index' errors
+            if (node->as.block.next != UINT_MAX) {
+                print_indent(indent + 1);
+                printf("-> Next:\n");
+                print_ast_node(c, node->as.block.next, indent + 2);
+            }
             break;
 
         default:

@@ -1,1 +1,6 @@
-(x.y-1+3)*4+test(x,y+32).field.x()
+{
+	test(x).x().y;
+	test = (x.y-1+3)*4+test(x,y+32).field.x();
+	testing = (x.y-1+3)*4+test(x,y+32).field.x();
+	testint = (x.y-1+3)*4+test(x,y+32).field.x();
+}
